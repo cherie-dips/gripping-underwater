@@ -1,7 +1,6 @@
 # Grippers for Underwater Manipulation
 
 **Dipti Dhawade** · **Sai Chinmayi Kalapatapu** · **Tanu Adhikari** · **Uday Sodhi**  
-Plaksha University
 
 **Mentor:** Prof. Sandeep Manjanna, Plaksha University
 
