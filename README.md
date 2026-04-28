@@ -20,7 +20,7 @@ Testing revealed a key tradeoff: the relocated pivot improved opening range but 
 
 ## Prototype Iterations
 
-| Fig 1 — 3-finger fin-ray gripper | Fig 2 — Iterated 4-finger design | Fig 3 — Iterated 4-finger rack-and-pinion |
+| Fig 1. 3-finger fin-ray gripper | Fig 2. Iterated 4-finger design | Fig 3. Iterated 4-finger rack-and-pinion |
 |:-:|:-:|:-:|
 | ![3-finger fin-ray gripper](images/fig1_3finger_finray.png) | ![Iterated 4-finger design](images/fig2_4finger_design.png) | ![Iterated 4-finger rack-and-pinion](images/fig3_rack_and_pinion.png) |
 | *(Inspired by: "LAD Robotics")* | *(Inspired by: "Print Challenge")* | *(Inspired by: "Print Challenge")* |
