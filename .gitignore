@@ -1,0 +1,14 @@
+.DS_Store
+**/.DS_Store
+
+# Raw capture footage (~3 GB) — the trimmed, web-ready clips live in media/
+SP Dutt Video/
+
+# Source decks; web-optimised copies are published from media/
+ILGC VI EndSem.pdf
+
+# Local editor config
+.vscode/
+
+# Byte-identical duplicate of media/ILGC-Final-Report.pdf, which is what the site serves
+ILGC Final Report.pdf

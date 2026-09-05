@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grippers for Underwater Manipulation</title>
+<meta name="description" content="A general-purpose fin-ray underwater gripper for an AUV — design, prototyping and testing. ILGC VI, Plaksha University.">
+<meta name="keywords" content="underwater gripper, fin ray effect, AUV, soft robotics, rack and pinion, Plaksha University">
+<meta property="og:title" content="Grippers for Underwater Manipulation">
+<meta property="og:description" content="A general-purpose fin-ray underwater gripper for an AUV — design, prototyping and testing.">
+<meta property="og:image" content="media/grid/egg.jpg">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#2f3640;
+    --ink-soft:#4a5568;
+    --muted:#7b8794;
+    --rule:#e3e8ee;
+    --bg:#ffffff;
+    --panel:#f6f9fb;
+    --accent:#0d5c8c;
+    --accent-deep:#08405f;
+    --maxw:940px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    font-size:16px;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  section{padding:46px 0}
+  section + section{border-top:1px solid var(--rule)}
+
+  /* ---------- header ---------- */
+  .hero{
+    padding:64px 0 44px;
+    text-align:center;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.94) 55%,#fff 100%),
+      linear-gradient(155deg,#0d5c8c 0%,#1b87b8 45%,#7fd3e4 100%);
+    border-bottom:1px solid var(--rule);
+  }
+  h1{
+    font-size:clamp(1.75rem,4.1vw,2.65rem);
+    line-height:1.18;
+    font-weight:700;
+    letter-spacing:-.015em;
+    margin:0 0 6px;
+    color:#17293a;
+  }
+  .subtitle{
+    font-size:1.02rem;color:var(--ink-soft);margin:0 0 22px;font-weight:500;
+  }
+  .authors{font-size:1.05rem;font-weight:700;color:#25384a;margin:0 0 6px}
+  .authors span{white-space:nowrap;display:inline-block;margin:0 .35em}
+  .affil{font-size:.95rem;color:var(--ink-soft);margin:0}
+  .affil strong{font-weight:700;color:#25384a}
+  .award{
+    display:inline-flex;align-items:center;gap:.5em;
+    margin:20px 0 4px;padding:7px 17px;
+    border:1px solid #d9b96a;border-radius:999px;
+    background:#fdf7e7;color:#7a5b12;
+    font-size:.9rem;font-weight:700;
+  }
+
+  .links{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:26px}
+  .btn{
+    display:inline-flex;align-items:center;gap:.5em;
+    padding:9px 20px;border-radius:999px;
+    background:#22303c;color:#fff;text-decoration:none;
+    font-size:.93rem;font-weight:500;
+    transition:background .16s ease, transform .16s ease;
+  }
+  .btn:hover{background:var(--accent);transform:translateY(-1px)}
+  .btn svg{width:16px;height:16px;fill:currentColor;flex:none}
+
+  /* ---------- typography ---------- */
+  h2{
+    font-size:1.55rem;font-weight:700;letter-spacing:-.01em;
+    text-align:center;margin:0 0 8px;color:#17293a;
+  }
+  .lede{text-align:center;color:var(--muted);font-size:.95rem;margin:0 auto 30px;max-width:640px}
+  .prose{font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-size:1.06rem;line-height:1.72;color:#33404d;text-align:justify;hyphens:auto}
+  .prose p{margin:0 0 1.05em}
+  .prose p:last-child{margin-bottom:0}
+  a{color:var(--accent)}
+
+  /* ---------- hero video ---------- */
+  .showcase{display:flex;justify-content:center}
+  .showcase video{
+    width:100%;max-width:352px;border-radius:12px;display:block;
+    background:#0d1b24;box-shadow:0 10px 34px rgba(16,44,66,.18);
+  }
+  figcaption{
+    text-align:center;color:var(--muted);font-size:.87rem;margin-top:14px;
+  }
+
+  /* ---------- STL viewers ---------- */
+  .parts{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .part{
+    border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--panel);
+  }
+  .part .stage{
+    position:relative;height:290px;overflow:hidden;
+    background:radial-gradient(120% 100% at 50% 0%,#ffffff 0%,#eaf1f6 60%,#dce7ef 100%);
+    cursor:grab;touch-action:none;
+  }
+  .part .stage:active{cursor:grabbing}
+  .part canvas{display:block;width:100%;height:100%}
+  .part .meta{padding:12px 15px 14px;border-top:1px solid var(--rule);background:#fff}
+  .part .name{font-weight:700;font-size:.97rem;color:#22303c}
+  .part .note{font-size:.83rem;color:var(--muted);margin-top:2px}
+  .spinner{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--muted);font-size:.85rem;
+  }
+  .hint{
+    position:absolute;left:10px;bottom:9px;
+    font-size:.72rem;color:#5c7183;background:rgba(255,255,255,.78);
+    padding:3px 9px;border-radius:999px;pointer-events:none;
+    opacity:0;transition:opacity .4s ease;
+  }
+  .part .stage.ready .hint{opacity:1}
+
+  /* ---------- video grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .cell{
+    position:relative;aspect-ratio:9/10;overflow:hidden;
+    border-radius:6px;background:#0e1a22;
+    outline:1px solid rgba(13,92,140,.28);outline-offset:-1px;
+  }
+  .cell video,.cell img{width:100%;height:100%;object-fit:cover;display:block}
+  .cell .tag{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:16px 8px 6px;font-size:.74rem;color:#fff;font-weight:500;
+    background:linear-gradient(180deg,rgba(6,20,30,0) 0%,rgba(6,20,30,.72) 100%);
+    opacity:0;transition:opacity .2s ease;
+  }
+  .cell:hover .tag{opacity:1}
+
+  /* ---------- credits ---------- */
+  .credits{font-size:.95rem;color:var(--ink-soft)}
+  .credits h3{font-size:1rem;font-weight:700;color:#22303c;margin:22px 0 6px}
+  .credits h3:first-child{margin-top:0}
+  .credits ul{margin:0;padding-left:1.15em}
+  .credits li{margin:.3em 0}
+  .refs{font-size:.87rem;color:var(--muted);line-height:1.6}
+  .refs p{margin:0 0 .7em;padding-left:1.6em;text-indent:-1.6em}
+  footer{
+    padding:26px 0 46px;text-align:center;color:var(--muted);font-size:.85rem;
+    border-top:1px solid var(--rule);
+  }
+
+  @media (max-width:820px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .parts{grid-template-columns:1fr}
+    .part .stage{height:260px}
+    section{padding:36px 0}
+    .prose{text-align:left}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Grippers for Underwater Manipulation</h1>
+    <p class="subtitle">A general-purpose fin-ray gripper for autonomous underwater vehicles</p>
+
+    <p class="authors">
+      <span>Dipti Dhawade</span>·<span>Sai Chinmayi Kalapatapu</span>·<span>Tanu Adhikari</span>·<span>Uday Sodhi</span>
+    </p>
+    <p class="affil">Mentor: <strong>Prof. Sandeep Manjanna</strong> &nbsp;·&nbsp; Plaksha University &nbsp;·&nbsp; ILGC VI</p>
+
+    <div class="award">🏆 Won 3rd Place - SP Dutt Award for Innovation and Impact</div>
+
+    <div class="links">
+      <a class="btn" href="media/ILGC-VI-EndSem-Slides.pdf">
+        <svg viewBox="0 0 24 24"><path d="M4 3h16a1 1 0 011 1v12a1 1 0 01-1 1h-6.2l2.9 3.4-1.1 1-3.6-4.2-3.6 4.2-1.1-1L9.2 17H3a1 1 0 01-1-1V4a1 1 0 011-1h1zm0 2v10h16V5H4z"/></svg>
+        Slides
+      </a>
+      <a class="btn" href="https://www.youtube.com/watch?v=HWLXG5a1gso&t=1s">
+        <svg viewBox="0 0 24 24"><path d="M23 12s0-3.8-.5-5.6a2.9 2.9 0 00-2-2C18.7 4 12 4 12 4s-6.7 0-8.5.5a2.9 2.9 0 00-2 2C1 8.2 1 12 1 12s0 3.8.5 5.6a2.9 2.9 0 002 2C5.3 20 12 20 12 20s6.7 0 8.5-.5a2.9 2.9 0 002-2C23 15.8 23 12 23 12zM9.8 15.4V8.6l6 3.4-6 3.4z"/></svg>
+        Video
+      </a>
+      <a class="btn" href="https://github.com/cherie-dips/gripping-underwater">
+        <svg viewBox="0 0 24 24"><path d="M12 .5a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0C17.4 4.8 18.4 5.1 18.4 5.1c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0012 .5z"/></svg>
+        Code
+      </a>
+      <a class="btn" href="media/ILGC-Final-Report.pdf">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 7V3.5L18.5 9H13zM8 13h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>
+        Report
+      </a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Abstract</h2>
+    <div class="prose">
+      <p>Underwater manipulation remains one of the most challenging unsolved problems in marine robotics. Gripping objects underwater is fundamentally harder than in open air: water creates drag that pushes objects away as fingers approach, surfaces become slippery, and buoyancy alters effective object weight. Most industrial grippers use rigid fingers that can crush fragile specimens such as corals and sponges. The ability of a robot to physically pick up, handle, or interact with objects underwater is critical for marine biology sampling, pipeline inspection, infrastructure repair, and environmental monitoring.</p>
+
+      <p>Our motivation comes from our AUV project, where we found our vehicle could navigate and detect objects but had no reliable way to interact with them physically. Through our literature review, we learned that underwater grippers must serve three core functions — detachment, collection, and storage — each demanding fundamentally different gripper behaviours [1]. Rigid parallel and claw grippers dominate current designs but offer poor force control and no tactile feedback. Soft grippers address some limitations but risk tearing under cyclic pressure.</p>
+
+      <p>Gathering these reflections, we set out to design a general-purpose underwater gripper: one capable of reliably grasping a range of object types, including spherical, rigid, delicate and slippery objects. Our approach uses the fin-ray effect [2], a mechanism inspired by ray-finned fish bone structure, where flexible fingers passively conform around an object upon contact, distributing load rather than concentrating it. Starting from an open-source three-finger design, we iterated to a four-finger configuration, redesigned the worm-follower actuation base, modified internal finger structures, and relocated the pivot point to increase opening range. Prototypes were 3D-printed in TPU, ABS and SLA resin to make them lightweight, water-resistant, and cheaper.</p>
+
+      <p>However, trial and error revealed a clear trade-off: moving the pivot outward improved how wide the gripper could open, but the fingertips no longer met at the centre during closure. This left a gap that stopped the gripper from grasping small or thin objects. Two fixes were explored: adding a curve to the pivot region of the finger arm, and changing the slit angles in the worm-follower base. In parallel, we investigated a rack-and-pinion mechanism where a central gear drives all fingers at once, completely removing the dependency on pivot placement. The rack-and-pinion prototyping introduced its own problems around lateral drift of the finger and structural fragility, which were resolved through revised clamp geometry and increased wall thickness, and finally by fabricating the body in aluminium.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Fin-Ray Effect in Action</h2>
+    <p class="lede">Compliant TPU fingers wrap passively around a tennis ball, distributing contact force instead of concentrating it at a point.</p>
+    <figure style="margin:0">
+      <div class="showcase">
+        <video src="media/hero_tennisball.mp4" poster="media/hero_tennisball.jpg"
+               muted loop playsinline autoplay preload="metadata"></video>
+      </div>
+      <figcaption>Two-finger fin-ray gripper conforming around a spherical object</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>3D-Printed Components</h2>
+    <p class="lede">Drag to rotate · scroll to zoom</p>
+    <div class="parts">
+      <div class="part">
+        <div class="stage" data-stl="stl/Fixed_Correct_Finger.stl">
+          <div class="spinner">Loading model…</div>
+          <div class="hint">drag · scroll</div>
+        </div>
+        <div class="meta">
+          <div class="name">Fin-Ray Finger</div>
+          <div class="note">Horizontal ladder fill with microwedge, printed in TPU </div>
+        </div>
+      </div>
+      <div class="part">
+        <div class="stage" data-stl="stl/Correct.stl">
+          <div class="spinner">Loading model…</div>
+          <div class="hint">drag · scroll</div>
+        </div>
+        <div class="meta">
+          <div class="name">Rack Arm &amp; Clamp</div>
+          <div class="note">Toothed sector driven by the central pinion; lateral guide walls prevent tangential drift</div>
+        </div>
+      </div>
+      <div class="part">
+        <div class="stage" data-stl="stl/Srew.stl">
+          <div class="spinner">Loading model…</div>
+          <div class="hint">drag · scroll</div>
+        </div>
+        <div class="meta">
+          <div class="name">Actuation Screw</div>
+          <div class="note">Knurled lead screw converting motor rotation into finger travel, SLA</div>
+        </div>
+      </div>
+      <div class="part">
+        <div class="stage" data-stl="stl/final_body_screws.stl">
+          <div class="spinner">Loading model…</div>
+          <div class="hint">drag · scroll</div>
+        </div>
+        <div class="meta">
+          <div class="name">Gripper Body</div>
+          <div class="note">Four-finger clamp holder with reinforced base and side walls</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Testing on the Yale-CMU-Berkeley Object Set</h2>
+    <p class="lede">Ten grasps across spherical, thin, rigid, deformable and slippery objects.</p>
+    <div class="grid" id="grid">
+      <div class="cell" data-src="media/grid/egg.mp4"          data-poster="media/grid/egg.jpg"><span class="tag">Plastic egg</span></div>
+      <div class="cell" data-src="media/grid/mug.mp4"          data-poster="media/grid/mug.jpg"><span class="tag">Mug</span></div>
+      <div class="cell" data-src="media/grid/rubik.mp4"        data-poster="media/grid/rubik.jpg"><span class="tag">Rubik's cube</span></div>
+      <div class="cell" data-src="media/grid/banana_short.mp4" data-poster="media/grid/banana_short.jpg"><span class="tag">Banana</span></div>
+      <div class="cell" data-src="media/grid/pinkball.mp4"     data-poster="media/grid/pinkball.jpg"><span class="tag">Inflatable ball</span></div>
+      <div class="cell" data-src="media/grid/marker.mp4"       data-poster="media/grid/marker.jpg"><span class="tag">Marker</span></div>
+      <div class="cell" data-src="media/grid/screw.mp4"        data-poster="media/grid/screw.jpg"><span class="tag">Screw on foam block</span></div>
+      <div class="cell" data-src="media/grid/banana.mp4"       data-poster="media/grid/banana.jpg"><span class="tag">Banana (long)</span></div>
+      <div class="cell" data-src="media/grid/wheel.mp4"        data-poster="media/grid/wheel.jpg"><span class="tag">Rubber wheel</span></div>
+      <div class="cell" data-src="media/grid/cokecan.mp4"      data-poster="media/grid/cokecan.jpg"><span class="tag">Drink can</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap credits">
+    <h2 style="margin-bottom:24px">Credits &amp; Acknowledgements</h2>
+
+    <h3>Design attribution</h3>
+    <ul>
+      <li>The three-finger rack-and-pinion architecture we re-engineered for four fingers is an open-source design by <strong>Print Challenge</strong>. Our lateral guide walls, thickened base, split screw/clamp-holder assembly and aluminium body are modifications of that design.</li>
+      <li>The fin-ray principle itself derives from the Fin Ray Effect®, discovered by Leif Kniese and developed by Festo.</li>
+    </ul>
+
+    <h3>Standards &amp; benchmarks</h3>
+    <ul>
+      <li>Test objects follow the <a href="https://www.ycbbenchmarks.com/">Yale-CMU-Berkeley (YCB) Object and Model Set</a>.</li>
+      <li>Testing metrics — grasp strength, slip resistance and grasp cycle time — follow NIST Special Publication 1227 (Falco, Van Wyk &amp; Messina, 2018).</li>
+    </ul>
+
+    <h3>References</h3>
+    <div class="refs">
+      <p>[1] Mazzeo, A., Aguzzi, J., Calisti, M., Canese, S., Angiolillo, M., Allcock, A.L., Vecchi, F., Stefanni, S. and Controzzi, M., 2022. Marine robotics for deep-sea specimen collection: a taxonomy of underwater manipulative actions. <em>Sensors</em>, 22(4), p.1471.</p>
+      <p>[2] Sofla, M.S., Golshanian, H., Sklar, E.I. and Calisti, M., 2025. Modeling and modification of fin-ray effect grippers to improve their load capacity and grasp stability. <em>Sensors and Actuators A: Physical</em>, 392, p.116711.</p>
+      <p>[3] Srinivas, G.L., Javed, A. and Faller, L.M., 2024. Versatile 3D-printed fin-ray effect soft robotic fingers: lightweight optimization and performance analysis. <em>Journal of the Brazilian Society of Mechanical Sciences and Engineering</em>, 46(6), p.382.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">ILGC VI · Plaksha University · 2026</div>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const loader = new STLLoader();
+
+function buildViewer(stage){
+  const url = stage.dataset.stl;
+  const spinner = stage.querySelector('.spinner');
+
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  // `false` keeps three.js from writing inline px sizes onto the canvas, so the
+  // stylesheet's width/height:100% stays in charge and the card can never overflow.
+  renderer.setSize(stage.clientWidth, stage.clientHeight, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  stage.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, stage.clientWidth/stage.clientHeight, 0.1, 5000);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c9d4, 2.1));
+  const key = new THREE.DirectionalLight(0xffffff, 2.0);  key.position.set(1, 1.4, 1.6);   scene.add(key);
+  const fill = new THREE.DirectionalLight(0xdcecf7, 1.1); fill.position.set(-1.4, .4, -1); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xffffff, .8);   rim.position.set(0, -1, -1.2);   scene.add(rim);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1.5;
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false;
+    stage.classList.remove('ready');   // drop the hint once the user takes over
+  });
+
+  loader.load(url, geo => {
+    geo.computeVertexNormals();
+    geo.computeBoundingBox();
+    const c = new THREE.Vector3();
+    geo.boundingBox.getCenter(c);
+    geo.translate(-c.x, -c.y, -c.z);
+
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0xb2bec9, metalness: 0.35, roughness: 0.48, flatShading: false
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+
+    // Stand each part up: rotate so its longest bounding-box axis points up the screen.
+    const size = new THREE.Vector3();
+    geo.boundingBox.getSize(size);
+    const longest = size.x > size.y ? (size.x > size.z ? 'x' : 'z')
+                                    : (size.y > size.z ? 'y' : 'z');
+    if(longest === 'z') mesh.rotation.x = -Math.PI/2;      // model Z -> screen Y
+    else if(longest === 'x') mesh.rotation.z = Math.PI/2;  // model X -> screen Y
+    scene.add(mesh);
+
+    const radius = size.length()/2;
+    const dist = radius / Math.sin(THREE.MathUtils.degToRad(camera.fov/2)) * 0.92;
+    camera.position.set(dist*0.62, dist*0.5, dist*0.68);
+    camera.near = radius/100; camera.far = radius*100; camera.updateProjectionMatrix();
+    controls.target.set(0,0,0);
+    controls.minDistance = radius*1.05;
+    controls.maxDistance = radius*8;
+    controls.update();
+
+    spinner.remove();
+    stage.classList.add('ready');
+  }, undefined, () => { spinner.textContent = 'Model could not be loaded.'; });
+
+  const ro = new ResizeObserver(() => {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if(!w || !h) return;
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  });
+  ro.observe(stage);
+
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }, {rootMargin:'120px'}).observe(stage);
+
+  renderer.setAnimationLoop(() => {
+    if(!visible) return;
+    controls.update();
+    renderer.render(scene, camera);
+  });
+}
+
+const partObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ obs.unobserve(e.target); buildViewer(e.target); }
+  });
+}, {rootMargin:'300px'});
+document.querySelectorAll('.stage[data-stl]').forEach(s => partObserver.observe(s));
+</script>
+
+<script>
+/* ---- synchronised looping video grid ---- */
+(function(){
+  const LOOP = 5.0;                       // every grid clip is exactly 5 s
+  const cells = [...document.querySelectorAll('#grid .cell')];
+  const videos = [];
+
+  cells.forEach(cell => {
+    const v = document.createElement('video');
+    v.muted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('playsinline',''); v.setAttribute('muted','');
+    v.preload = 'none';
+    v.poster = cell.dataset.poster;
+    cell.prepend(v);
+    videos.push(v);
+  });
+
+  let started = false;
+
+  function start(){
+    if(started) return;
+    started = true;
+    videos.forEach(v => { v.src = v.parentElement.dataset.src; v.load(); });
+    Promise.all(videos.map(v => new Promise(res => {
+      if(v.readyState >= 2) return res();
+      v.addEventListener('loadeddata', res, {once:true});
+      v.addEventListener('error', res, {once:true});
+    }))).then(() => {
+      videos.forEach(v => { v.currentTime = 0; v.play().catch(()=>{}); });
+      setInterval(resync, 1500);
+      document.addEventListener('visibilitychange', () => { if(!document.hidden) resync(); });
+    });
+  }
+
+  // The first clip is the master clock: following real playback rather than a wall
+  // clock keeps the grid together even when a decoder briefly stalls.
+  function resync(){
+    if(document.hidden) return;
+    const lead = videos.find(v => v.readyState >= 2 && !v.paused && !v.seeking);
+    if(!lead) { videos.forEach(v => v.play().catch(()=>{})); return; }
+    const master = lead.currentTime % LOOP;
+    videos.forEach(v => {
+      if(v === lead || v.readyState < 2 || v.seeking) return;
+      let d = (v.currentTime % LOOP) - master;
+      if(d >  LOOP/2) d -= LOOP;
+      if(d < -LOOP/2) d += LOOP;
+      if(Math.abs(d) > 0.25) v.currentTime = master;
+      if(v.paused) v.play().catch(()=>{});
+    });
+  }
+
+  const gridObs = new IntersectionObserver(es => {
+    if(es[0].isIntersecting){ gridObs.disconnect(); start(); }
+  }, {rootMargin:'250px'});
+  gridObs.observe(document.getElementById('grid'));
+
+  /* pause the hero clip while it is off-screen */
+  const hero = document.querySelector('.showcase video');
+  if(hero){
+    new IntersectionObserver(es => {
+      es[0].isIntersecting ? hero.play().catch(()=>{}) : hero.pause();
+    }, {rootMargin:'100px'}).observe(hero);
+  }
+})();
+</script>
+
+</body>
+</html>

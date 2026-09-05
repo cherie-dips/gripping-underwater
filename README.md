@@ -6,6 +6,8 @@
 
 > 🏆 **3rd Place — SP Dutt Award For Innovation and Impact**
 
+**🌐 Project website: https://cherie-dips.github.io/gripping-underwater/**
+
 ---
 
 Underwater manipulation remains one of the most challenging unsolved problems in marine robotics. Gripping objects underwater is fundamentally harder than in open air, water creates drag that pushes objects away as fingers approach, surfaces become slippery, and buoyancy alters effective object weight. Most industrial grippers use rigid fingers that can crush fragile specimens such as corals and sponges. The ability of a robot to physically pick up, handle, or interact with objects underwater is critical for tasks like marine biology sampling, pipeline inspection, infrastructure repair, and environmental monitoring.
@@ -14,7 +16,8 @@ Our motivation comes from our AUV project, where we found our vehicle could navi
 
 Gathering these reflections, we set out to design a general-purpose underwater gripper; one capable of reliably grasping a range of object types, including but not limited to spherical, rigid, delicate and slippery objects. Our approach uses the fin-ray effect [2], a mechanism inspired by ray-finned fish bone structure, where flexible fingers passively conform around an object upon contact, distributing load rather than concentrating it. Starting from an open-source three-finger design, we iterated to a four-finger configuration, redesigned the worm-follower actuation base, modified internal finger structures, and relocated the pivot point to increase opening range. Prototypes were 3D-printed in TPU and ABS to make them lightweight, water-resistant, and cheaper.
 
-Testing revealed a key tradeoff: the relocated pivot improved opening range but introduced a fingertip gap that prevented grasping small objects. This motivated exploration of a rack-and-pinion mechanism, where a central gear drives all fingers simultaneously, decoupling opening range from pivot geometry. We are also investigating full silicone fingers to improve grip on slippery surfaces while protecting delicate specimens.
+However, trial and error revealed a clear trade-off: moving the pivot outward improved how wide the gripper could open, but the fingertips no longer met at the centre during closure. This left a gap that stopped the gripper from grasping small or thin objects. Two fixes were explored: adding a curve to the pivot region of the finger arm, and changing the slit angles in the worm-follower base. In parallel, we investigated a rack-and-pinion mechanism where a central gear drives all fingers at once,
+completely removing the dependency on pivot placement. The rack-and-pinion prototyping introduced its own problems around lateral drift of the finger and structural fragility, which were resolved through revised clamp geometry and increased wall thickness. 
 
 ---
 
@@ -29,7 +32,7 @@ Testing revealed a key tradeoff: the relocated pivot improved opening range but 
 
 ## Next Steps
 
-The next phase involves fabricating and comparing the fin-ray prototype against alternative mechanisms across defined test objects. Through our project, we aim to contribute towards expanding the current literature available on underwater grippers and the development of a more reliable, versatile, and damage-minimising gripper solution for critical marine manipulation tasks.
+The next phase involves fabricating and comparing the fin-ray prototype against alternative mechanisms across defined test objects. Future work includes silicone moulding of finger surfaces for better grip on slippery objects and developing computer vision based grasping for robust object manipulation across different gripper types. Through our project, we aim to contribute towards expanding the current literature available on underwater grippers and the development of a more reliable, versatile, and damage-minimising gripper solution for critical marine manipulation tasks.
 
 ---
 

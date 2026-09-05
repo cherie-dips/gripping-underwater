@@ -1,0 +1,52 @@
+{
+ "mug": {
+  "src": "IMG_1870.MOV",
+  "start": 15.0,
+  "dur": 5.0
+ },
+ "rubik": {
+  "src": "IMG_1830.MOV",
+  "start": 12.5,
+  "dur": 5.0
+ },
+ "banana_short": {
+  "src": "IMG_1872.MOV",
+  "start": 6.45,
+  "dur": 5.0
+ },
+ "marker": {
+  "src": "IMG_1878.MOV",
+  "start": 11.0,
+  "dur": 5.0
+ },
+ "screw": {
+  "src": "IMG_1875.MOV",
+  "start": 9.5,
+  "dur": 5.0
+ },
+ "banana": {
+  "src": "IMG_1879.MOV",
+  "start": 9.0,
+  "dur": 5.0
+ },
+ "wheel": {
+  "src": "IMG_1801.MOV",
+  "start": 9.5,
+  "dur": 5.0
+ },
+ "cokecan": {
+  "src": "IMG_1869.MOV",
+  "start": 16.5,
+  "dur": 5.0
+ },
+ "egg": {
+  "src": "IMG_1833.MOV",
+  "start": 7.2,
+  "dur": 5.0
+ },
+ "pinkball": {
+  "src": "IMG_1796.MOV",
+  "start": 2.5,
+  "dur": 5.0
+ }
+}
