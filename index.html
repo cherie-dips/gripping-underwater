@@ -28,7 +28,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -37,10 +37,10 @@
     --muted:#7b8794;
     --rule:#e3e8ee;
     --bg:#ffffff;
-    --panel:#f6f9fb;
     --accent:#0d5c8c;
     --accent-deep:#08405f;
     --maxw:940px;
+    --display:"Google Sans","Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -54,18 +54,15 @@
   }
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
   section{padding:46px 0}
-  section + section{border-top:1px solid var(--rule)}
 
   /* ---------- header ---------- */
   .hero{
     padding:64px 0 44px;
     text-align:center;
-    background:
-      linear-gradient(180deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.94) 55%,#fff 100%),
-      linear-gradient(155deg,#0d5c8c 0%,#1b87b8 45%,#7fd3e4 100%);
-    border-bottom:1px solid var(--rule);
+    background:var(--bg);
   }
   h1{
+    font-family:var(--display);
     font-size:clamp(1.75rem,4.1vw,2.65rem);
     line-height:1.18;
     font-weight:700;
@@ -76,7 +73,7 @@
   .subtitle{
     font-size:1.02rem;color:var(--ink-soft);margin:0 0 22px;font-weight:500;
   }
-  .authors{font-size:1.05rem;font-weight:700;color:#25384a;margin:0 0 6px}
+  .authors{font-family:var(--display);font-size:1.05rem;font-weight:700;color:#25384a;margin:0 0 6px}
   .authors span{white-space:nowrap;display:inline-block;margin:0 .35em}
   .affil{font-size:.95rem;color:var(--ink-soft);margin:0}
   .affil strong{font-weight:700;color:#25384a}
@@ -101,6 +98,7 @@
 
   /* ---------- typography ---------- */
   h2{
+    font-family:var(--display);
     font-size:1.55rem;font-weight:700;letter-spacing:-.01em;
     text-align:center;margin:0 0 8px;color:#17293a;
   }
@@ -123,17 +121,17 @@
   /* ---------- STL viewers ---------- */
   .parts{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
   .part{
-    border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--panel);
+    border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--bg);
   }
   .part .stage{
     position:relative;height:290px;overflow:hidden;
-    background:radial-gradient(120% 100% at 50% 0%,#ffffff 0%,#eaf1f6 60%,#dce7ef 100%);
+    background:var(--bg);
     cursor:grab;touch-action:none;
   }
   .part .stage:active{cursor:grabbing}
   .part canvas{display:block;width:100%;height:100%}
   .part .meta{padding:12px 15px 14px;border-top:1px solid var(--rule);background:#fff}
-  .part .name{font-weight:700;font-size:.97rem;color:#22303c}
+  .part .name{font-family:var(--display);font-weight:700;font-size:.97rem;color:#22303c}
   .part .note{font-size:.83rem;color:var(--muted);margin-top:2px}
   .spinner{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -173,7 +171,6 @@
   .refs p{margin:0 0 .7em;padding-left:1.6em;text-indent:-1.6em}
   footer{
     padding:26px 0 46px;text-align:center;color:var(--muted);font-size:.85rem;
-    border-top:1px solid var(--rule);
   }
 
   @media (max-width:820px){
@@ -222,6 +219,20 @@
 
 <section>
   <div class="wrap">
+    <h2>Fin-Ray Effect in Action</h2>
+    <p class="lede">Compliant TPU fingers wrap passively around a tennis ball, distributing contact force instead of concentrating it at a point.</p>
+    <figure style="margin:0">
+      <div class="showcase">
+        <video src="media/hero_tennisball.mp4" poster="media/hero_tennisball.jpg"
+               muted loop playsinline autoplay preload="metadata"></video>
+      </div>
+      <figcaption>Two-finger fin-ray gripper conforming around a spherical object</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <h2>Abstract</h2>
     <div class="prose">
       <p>Underwater manipulation remains one of the most challenging unsolved problems in marine robotics. Gripping objects underwater is fundamentally harder than in open air: water creates drag that pushes objects away as fingers approach, surfaces become slippery, and buoyancy alters effective object weight. Most industrial grippers use rigid fingers that can crush fragile specimens such as corals and sponges. The ability of a robot to physically pick up, handle, or interact with objects underwater is critical for marine biology sampling, pipeline inspection, infrastructure repair, and environmental monitoring.</p>
@@ -232,20 +243,6 @@
 
       <p>However, trial and error revealed a clear trade-off: moving the pivot outward improved how wide the gripper could open, but the fingertips no longer met at the centre during closure. This left a gap that stopped the gripper from grasping small or thin objects. Two fixes were explored: adding a curve to the pivot region of the finger arm, and changing the slit angles in the worm-follower base. In parallel, we investigated a rack-and-pinion mechanism where a central gear drives all fingers at once, completely removing the dependency on pivot placement. The rack-and-pinion prototyping introduced its own problems around lateral drift of the finger and structural fragility, which were resolved through revised clamp geometry and increased wall thickness, and finally by fabricating the body in aluminium.</p>
     </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <h2>Fin-Ray Effect in Action</h2>
-    <p class="lede">Compliant TPU fingers wrap passively around a tennis ball, distributing contact force instead of concentrating it at a point.</p>
-    <figure style="margin:0">
-      <div class="showcase">
-        <video src="media/hero_tennisball.mp4" poster="media/hero_tennisball.jpg"
-               muted loop playsinline autoplay preload="metadata"></video>
-      </div>
-      <figcaption>Two-finger fin-ray gripper conforming around a spherical object</figcaption>
-    </figure>
   </div>
 </section>
 
